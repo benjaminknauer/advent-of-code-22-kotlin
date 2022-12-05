@@ -1,6 +1,6 @@
+package day01
+
 import java.io.File
-import java.util.stream.Collectors
-import kotlin.streams.toList
 
 data class Sweet(val calories: Int)
 data class Elf(val sweets: List<Sweet>) {
@@ -20,29 +20,33 @@ fun parseInput(input: String): List<Elf> {
         }
 }
 
+fun getCaloriesOfTopNElves(elves: List<Elf>, n: Int): Int {
+    val elvesSortedByCalories = elves
+        .sortedByDescending { it.getCaloriesSum() }
+
+    return elvesSortedByCalories
+        .take(n)
+        .sumOf { it.getCaloriesSum() }
+}
+
+fun part1(input: String): Int {
+    val elves = parseInput(input)
+
+    return getCaloriesOfTopNElves(elves, 1)
+}
+
+fun part2(input: String): Int {
+    val elves = parseInput(input)
+
+    return getCaloriesOfTopNElves(elves, 3)
+}
+
 fun main() {
-
-    fun part1(input: String): Int {
-        val elfsSortedByCalories = parseInput(input)
-            .sortedByDescending { it.getCaloriesSum() }
-
-        return elfsSortedByCalories.first().getCaloriesSum()
-    }
-
-    fun part2(input: String): Int {
-        val elfsSortedByCalories = parseInput(input)
-            .sortedByDescending { it.getCaloriesSum() }
-
-        return elfsSortedByCalories
-            .take(3)
-            .sumOf { it.getCaloriesSum() }
-    }
-
     // test if implementation meets criteria from the description, like:
-    val testInput = File("src/Day01_test.txt").readText()
+    val testInput = File("src/day01/Day01_test.txt").readText()
     check(part1(testInput) == 24000)
 
-    val input = File("src/Day01.txt").readText()
+    val input = File("src/day01/Day01.txt").readText()
 
     println("Result Part 1: %s".format(part1(input)))
     println("Result Part 2: %s".format(part2(input)))
